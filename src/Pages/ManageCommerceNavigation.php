@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace AIArmada\FilamentCommerceSupport\Pages;
 
 use AIArmada\FilamentCommerceSupport\Settings\CommerceNavigationSettings;
-use AIArmada\CommerceSupport\Support\Filament\CommerceNavigation;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Facades\Filament;
@@ -334,10 +333,14 @@ class ManageCommerceNavigation extends Page
         }
 
         foreach ($panel->getPageConfigurations() as $configuration) {
-            $page = $configuration->getPage();
-            $class = $page::class;
-            $label = $page::getNavigationLabel();
-            $group = $page::getNavigationGroup();
+            $class = $configuration->getPage();
+
+            if (! is_string($class)) {
+                $class = get_class($class);
+            }
+
+            $label = $class::getNavigationLabel();
+            $group = $class::getNavigationGroup();
             $groupPrefix = $group ? "[{$group}] " : '';
             $options[$class] = "{$groupPrefix}[Page] {$label} — {$class}";
         }
