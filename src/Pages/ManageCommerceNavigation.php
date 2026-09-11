@@ -444,7 +444,7 @@ class ManageCommerceNavigation extends Page
     private function getTrueDefaultOverrides(): array
     {
         $defaults = [];
-        $originalItems = NavigationConfigurator::$originalItemsConfig;
+        $originalItems = NavigationConfigurator::getOriginalItemsConfig();
 
         $extract = function (string $class) use (&$defaults, $originalItems): void {
             $group = null;
@@ -500,7 +500,7 @@ class ManageCommerceNavigation extends Page
      */
     private function getTrueDefaultGroups(): array
     {
-        return $this->getDefaultGroups(NavigationConfigurator::$originalGroupConfig);
+        return $this->getDefaultGroups(NavigationConfigurator::getOriginalGroupConfig());
     }
 
     public function content(Schema $schema): Schema
@@ -726,7 +726,7 @@ class ManageCommerceNavigation extends Page
         $userGroups = $settings->groups;
 
         $itemIndex = 0;
-        foreach ($defaults as $class => &$config) {
+        foreach ($defaults as &$config) {
             $config['__item_index'] = $itemIndex++;
             $groupKey = $config['group'];
             $config['__group_sort'] = 9999;
